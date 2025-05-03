@@ -1,0 +1,28 @@
+@media (max-width: 768px) {
+    .college-header {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .left, .right {
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+  
+    .college-logo,
+    .naac-logo {
+      width: 70px;
+    }
+  
+    .college-title {
+      font-size: 22px;
+    }
+  
+    .college-subtitle {
+      font-size: 18px;
+    }
+  
+    .college-affiliation {
+      font-size: 13px;
+    }
+  }

@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f4f8;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .form-wrapper {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1a237e;
+  }
+  
+  form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  form select, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  
+  button {
+    background-color: #1a237e;
+    color: white;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0d1b5a;
+  }
+  /* Already added styling from earlier response + below: */
+.error {
+    color: red;
+    font-size: 0.9rem;
+    display: block;
+    margin-top: 2px;
+  }
+  
