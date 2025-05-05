@@ -12,8 +12,16 @@ const subjectList = document.getElementById("subjectList");
 const theorySubjects = ["Maths", "OOP", "DBMS", "AI"];
 const practicalSubjects = ["Lab-1", "DBMS Lab", "AI Lab"];
 
-function populateSubjects(subjects) {
+function populateSubjects(subjects, includeAll = false) {
   subjectList.innerHTML = '<option value="">--Select Subject--</option>';
+  
+  if (includeAll) {
+    const allOption = document.createElement("option");
+    allOption.value = "All";
+    allOption.textContent = "All";
+    subjectList.appendChild(allOption);
+  }
+
   subjects.forEach(sub => {
     const opt = document.createElement("option");
     opt.value = sub;
@@ -50,10 +58,10 @@ classDropdown.addEventListener("change", () => {
   if (dept === "MCA" || dept === "MBA") {
     sems = year === "1st Year" ? [1, 2] : [3, 4];
   } else {
-    if (year === "3rd Year") sems = [5, 6];
-    else if (year === "4th Year") sems = [7, 8];
+    if (year === "1st Year") sems = [1, 2];
     else if (year === "2nd Year") sems = [3, 4];
-    else if (year === "1st Year") sems = [1, 2];
+    else if (year === "3rd Year") sems = [5, 6];
+    else if (year === "4th Year") sems = [7, 8];
   }
 
   semesterDropdown.innerHTML = '<option value="">--Select Semester--</option>';
@@ -76,17 +84,17 @@ resultDropdown.addEventListener("change", () => {
     subjectTypeGroup.style.display = "block";
   } else if (val === "Practical") {
     subjectListGroup.style.display = "block";
-    populateSubjects(practicalSubjects);
+    populateSubjects(practicalSubjects, true); // Include 'All'
   } else if (val === "Theory") {
     subjectListGroup.style.display = "block";
-    populateSubjects(theorySubjects);
+    populateSubjects(theorySubjects, true); // Include 'All'
   } else if (val === "MSE") {
     mseTypeGroup.style.display = "block";
     subjectListGroup.style.display = "block";
-    populateSubjects(theorySubjects);
+    populateSubjects(theorySubjects); // No 'All' for MSE
   } else if (val === "TA") {
     subjectListGroup.style.display = "block";
-    populateSubjects(theorySubjects);
+    populateSubjects(theorySubjects); // No 'All' for TA
   }
 });
 
@@ -98,6 +106,8 @@ document.getElementById("subjectType").addEventListener("change", () => {
   } else if (type === "Theory") {
     subjectListGroup.style.display = "block";
     populateSubjects(theorySubjects);
+  } else if (type === "All") {
+    subjectListGroup.style.display = "none";
   } else {
     subjectListGroup.style.display = "none";
   }
@@ -106,7 +116,7 @@ document.getElementById("subjectType").addEventListener("change", () => {
 document.getElementById("resultForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  // reset all error messages
+  // Reset all error messages
   document.querySelectorAll(".error").forEach(el => el.textContent = "");
 
   const isEmpty = (id, message) => {
@@ -136,9 +146,10 @@ document.getElementById("resultForm").addEventListener("submit", function (e) {
   if (
     ["Practical", "Theory", "MSE", "TA", "Subject-wise"].includes(resultDropdown.value)
   ) {
+    const subType = document.getElementById("subjectType")?.value;
     if (
       resultDropdown.value !== "Subject-wise" ||
-      document.getElementById("subjectType").value !== "All"
+      (subType !== "All" && subType !== "")
     ) {
       hasError |= isEmpty("subjectList", "Please select a subject.");
     }
