@@ -7,21 +7,19 @@ const mseTypeGroup = document.getElementById("mseTypeGroup");
 const subjectListGroup = document.getElementById("subjectListGroup");
 
 const subjectList = document.getElementById("subjectList");
+const mseType = document.getElementById("mseType");
 
-// Dummy data
 const theorySubjects = ["Maths", "OOP", "DBMS", "AI"];
 const practicalSubjects = ["Lab-1", "DBMS Lab", "AI Lab"];
 
 function populateSubjects(subjects, includeAll = false) {
   subjectList.innerHTML = '<option value="">--Select Subject--</option>';
-  
   if (includeAll) {
     const allOption = document.createElement("option");
     allOption.value = "All";
     allOption.textContent = "All";
     subjectList.appendChild(allOption);
   }
-
   subjects.forEach(sub => {
     const opt = document.createElement("option");
     opt.value = sub;
@@ -30,14 +28,29 @@ function populateSubjects(subjects, includeAll = false) {
   });
 }
 
+function populateMSE(includeAll = false) {
+  mseType.innerHTML = '<option value="">--Select MSE--</option>';
+  if (includeAll) {
+    const allOption = document.createElement("option");
+    allOption.value = "All";
+    allOption.textContent = "All";
+    mseType.appendChild(allOption);
+  }
+  ["MSE-1", "MSE-2", "MSE-3"].forEach(mse => {
+    const opt = document.createElement("option");
+    opt.value = mse;
+    opt.textContent = mse;
+    mseType.appendChild(opt);
+  });
+}
+
 department.addEventListener("change", () => {
   const dept = department.value;
   classDropdown.innerHTML = '<option value="">--Select Class--</option>';
 
-  const classes =
-    dept === "MCA" || dept === "MBA"
-      ? ["1st Year", "2nd Year"]
-      : ["1st Year", "2nd Year", "3rd Year", "4th Year"];
+  const classes = (dept === "MCA" || dept === "MBA")
+    ? ["1st Year", "2nd Year"]
+    : ["1st Year", "2nd Year", "3rd Year", "4th Year"];
 
   classes.forEach(cls => {
     const option = document.createElement("option");
@@ -58,10 +71,10 @@ classDropdown.addEventListener("change", () => {
   if (dept === "MCA" || dept === "MBA") {
     sems = year === "1st Year" ? [1, 2] : [3, 4];
   } else {
-    if (year === "1st Year") sems = [1, 2];
-    else if (year === "2nd Year") sems = [3, 4];
-    else if (year === "3rd Year") sems = [5, 6];
+    if (year === "3rd Year") sems = [5, 6];
     else if (year === "4th Year") sems = [7, 8];
+    else if (year === "2nd Year") sems = [3, 4];
+    else if (year === "1st Year") sems = [1, 2];
   }
 
   semesterDropdown.innerHTML = '<option value="">--Select Semester--</option>';
@@ -84,17 +97,18 @@ resultDropdown.addEventListener("change", () => {
     subjectTypeGroup.style.display = "block";
   } else if (val === "Practical") {
     subjectListGroup.style.display = "block";
-    populateSubjects(practicalSubjects, true); // Include 'All'
+    populateSubjects(practicalSubjects, true);
   } else if (val === "Theory") {
     subjectListGroup.style.display = "block";
-    populateSubjects(theorySubjects, true); // Include 'All'
+    populateSubjects(theorySubjects, true);
   } else if (val === "MSE") {
     mseTypeGroup.style.display = "block";
     subjectListGroup.style.display = "block";
-    populateSubjects(theorySubjects); // No 'All' for MSE
+    populateMSE(true);
+    populateSubjects(theorySubjects, true);
   } else if (val === "TA") {
     subjectListGroup.style.display = "block";
-    populateSubjects(theorySubjects); // No 'All' for TA
+    populateSubjects(theorySubjects);
   }
 });
 
@@ -102,12 +116,10 @@ document.getElementById("subjectType").addEventListener("change", () => {
   const type = document.getElementById("subjectType").value;
   if (type === "Practical") {
     subjectListGroup.style.display = "block";
-    populateSubjects(practicalSubjects);
+    populateSubjects(practicalSubjects, true);
   } else if (type === "Theory") {
     subjectListGroup.style.display = "block";
-    populateSubjects(theorySubjects);
-  } else if (type === "All") {
-    subjectListGroup.style.display = "none";
+    populateSubjects(theorySubjects, true);
   } else {
     subjectListGroup.style.display = "none";
   }
@@ -116,7 +128,6 @@ document.getElementById("subjectType").addEventListener("change", () => {
 document.getElementById("resultForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  // Reset all error messages
   document.querySelectorAll(".error").forEach(el => el.textContent = "");
 
   const isEmpty = (id, message) => {
@@ -146,10 +157,9 @@ document.getElementById("resultForm").addEventListener("submit", function (e) {
   if (
     ["Practical", "Theory", "MSE", "TA", "Subject-wise"].includes(resultDropdown.value)
   ) {
-    const subType = document.getElementById("subjectType")?.value;
     if (
       resultDropdown.value !== "Subject-wise" ||
-      (subType !== "All" && subType !== "")
+      document.getElementById("subjectType").value !== "All"
     ) {
       hasError |= isEmpty("subjectList", "Please select a subject.");
     }
@@ -157,6 +167,6 @@ document.getElementById("resultForm").addEventListener("submit", function (e) {
 
   if (!hasError) {
     alert("Form submitted successfully!");
-    // Further logic here...
+    // Further backend logic goes here
   }
 });

@@ -3,10 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Result Selection</title>
+  <title>Result Selection Dashboard</title>
   <link rel="stylesheet" href="result-style.css" />
 </head>
 <body>
+  <header class="college-header">
+    <div class="left">
+      <img src="/Assets/logo of collage.png" alt="College Logo" class="college-logo">
+    </div>
+
+    <div class="center">
+      <h1 class="college-title">P. R. Pote Patil</h1>
+      <h2 class="college-subtitle">College of Engineering & Management, Amravati</h2>
+      <h4 class="college-affiliation">An Autonomous Institute Affiliated to Sant Gadge Baba Amravati University</h4>
+    </div>
+
+    <div class="right">
+      <img src="/Assets/aictc logo.jpg" alt="NAAC Logo" class="naac-logo">
+    </div>
+  </header><br>
+
+  <!-- Dashboard Form -->
   <div class="form-wrapper">
     <h2>Select Result Filters</h2>
     <form id="resultForm">
@@ -79,11 +96,12 @@
           <option value="MSE-1">MSE-1</option>
           <option value="MSE-2">MSE-2</option>
           <option value="MSE-3">MSE-3</option>
+          <option value="All">All</option>
         </select>
         <small class="error" id="mseTypeError"></small>
       </div>
 
-      <!-- Subject Dropdown (for Theory/Practical/TA/MSE) -->
+      <!-- Subject Dropdown -->
       <div id="subjectListGroup" style="display:none;">
         <label for="subjectList">Select Subject</label>
         <select id="subjectList">
