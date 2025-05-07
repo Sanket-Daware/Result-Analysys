@@ -9,17 +9,42 @@ function showSection(id) {
   // ------------------------ CLASS-SEMESTER LOGIC ------------------------
   const classSelect = document.getElementById("classSelect");
   const semSelect = document.getElementById("semSelect");
+  const deptSelectMarks = document.getElementById("deptSelect");
+  
+  deptSelectMarks?.addEventListener("change", () => {
+    const dept = deptSelectMarks.value;
+    classSelect.innerHTML = '<option value="">--Select Class--</option>';
+    semSelect.innerHTML = '<option value="">--Select Semester--</option>';
+  
+    const classes = (dept === "MCA" || dept === "MBA")
+      ? ["1st Year", "2nd Year"]
+      : ["1st Year", "2nd Year", "3rd Year", "4th Year"];
+  
+    classes.forEach(cls => {
+      const opt = document.createElement("option");
+      opt.value = cls;
+      opt.textContent = cls;
+      classSelect.appendChild(opt);
+    });
+  });
   
   classSelect?.addEventListener("change", () => {
+    const dept = deptSelectMarks.value;
     const year = classSelect.value;
     semSelect.innerHTML = '<option value="">--Select Semester--</option>';
+  
     const semesterMap = {
       "1st Year": [1, 2],
       "2nd Year": [3, 4],
       "3rd Year": [5, 6],
       "4th Year": [7, 8]
     };
-    (semesterMap[year] || []).forEach(s => {
+  
+    const sems = (dept === "MBA" || dept === "MCA")
+      ? (year === "1st Year" ? [1, 2] : [3, 4])
+      : semesterMap[year] || [];
+  
+    sems.forEach(s => {
       const opt = document.createElement("option");
       opt.value = `Sem ${s}`;
       opt.textContent = `Semester ${s}`;
@@ -39,6 +64,7 @@ function showSection(id) {
       opt.textContent = sub;
       subjectDropdown.appendChild(opt);
     });
+    document.getElementById("evalType").dispatchEvent(new Event("change"));
   });
   
   const evalType = document.getElementById("evalType");
@@ -128,6 +154,8 @@ function showSection(id) {
   department?.addEventListener("change", () => {
     const dept = department.value;
     classDropdown.innerHTML = '<option value="">--Select Class--</option>';
+    semesterDropdown.innerHTML = '<option value="">--Select Semester--</option>';
+  
     const classes = (dept === "MCA" || dept === "MBA")
       ? ["1st Year", "2nd Year"]
       : ["1st Year", "2nd Year", "3rd Year", "4th Year"];
@@ -138,15 +166,13 @@ function showSection(id) {
       option.textContent = cls;
       classDropdown.appendChild(option);
     });
-  
-    semesterDropdown.innerHTML = '<option value="">--Select Semester--</option>';
   });
   
   classDropdown?.addEventListener("change", () => {
     const dept = department.value;
     const year = classDropdown.value;
-  
     let sems = [];
+  
     if (dept === "MCA" || dept === "MBA") {
       sems = year === "1st Year" ? [1, 2] : [3, 4];
     } else {
@@ -206,8 +232,8 @@ function showSection(id) {
   
   document.getElementById("resultForm")?.addEventListener("submit", function (e) {
     e.preventDefault();
-  
     const grid = document.getElementById("resultGrid");
+  
     const dept = department.value;
     const session = document.getElementById("session").value;
     const cls = classDropdown.value;
