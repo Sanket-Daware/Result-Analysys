@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Faculty Dashboard</title>
+  <link rel="stylesheet" href="faculty-style.css" />
+</head>
+<body>
+  <!-- College Header -->
+  <header class="college-header">
+    <img src="/Assets/logo of collage.png" alt="College Logo" class="college-logo">
+    <div class="center">
+      <h1 class="college-title">P. R. Pote Patil</h1>
+      <h2 class="college-subtitle">College of Engineering & Management, Amravati</h2>
+      <h4 class="college-affiliation">An Autonomous Institute Affiliated to Sant Gadge Baba Amravati University</h4>
+    </div>
+    <img src="/Assets/aictc logo.jpg" alt="AICTE Logo" class="naac-logo">
+  </header>
+
+  <!-- Dashboard Header -->
+  <header class="dashboard-header">
+    <h1>Faculty Dashboard</h1>
+    <nav>
+      <button onclick="showSection('register')">Register Student</button>
+      <button onclick="showSection('view')">View Result</button>
+      <button onclick="showSection('marks')">Fill/Update Marks</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Register Section -->
+    <section id="register" class="section">
+      <div class="form-area">
+        <h2>Register Student</h2>
+        <form id="registerForm">
+          <input type="text" placeholder="First Name" required>
+          <input type="text" placeholder="Middle Name">
+          <input type="text" placeholder="Last Name" required>
+          <input type="text" placeholder="Mother Name" required>
+          <select required>
+            <option value="">Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <input type="date" required>
+          <div class="buttons">
+            <button type="reset">Clear</button>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+      <div class="live-grid">
+        <h3>Recent Students</h3>
+        <div id="studentGrid">No entries yet.</div>
+      </div>
+    </section>
+
+    <!-- View Result Section -->
+    <section id="view" class="section" style="display:none;">
+      <div class="form-area">
+        <h2>View Student Result</h2>
+        <form id="resultForm">
+          <select id="department" required>
+            <option value="">--Select Department--</option>
+            <option value="MCA">MCA</option>
+            <option value="MBA">MBA</option>
+            <option value="AIDS">AIDS</option>
+            <option value="AIML">AIML</option>
+            <option value="CIVIL">CIVIL</option>
+            <option value="MECHANICAL">MECHANICAL</option>
+            <option value="ELECTRONIC">ELECTRONIC</option>
+            <option value="CSE">CSE</option>
+            <option value="PHARMACY">PHARMACY</option>
+          </select>
+
+          <select id="session" required>
+            <option value="">--Select Session--</option>
+            <option value="2022-2023">2022-2023</option>
+            <option value="2023-2024">2023-2024</option>
+            <option value="2024-2025">2024-2025</option>
+          </select>
+
+          <select id="class" required></select>
+          <select id="semester" required></select>
+
+          <select id="result" required>
+            <option value="">--Select Result Type--</option>
+            <option value="Subject-wise">Subject-wise</option>
+            <option value="Practical">Practical</option>
+            <option value="Theory">Theory</option>
+            <option value="MSE">MSE</option>
+            <option value="TA">TA</option>
+            <option value="Overall">Overall</option>
+          </select>
+
+          <div id="subjectTypeGroup" style="display:none;">
+            <label>Subject Type</label>
+            <select id="subjectType">
+              <option value="">--Select--</option>
+              <option value="Theory">Theory</option>
+              <option value="Practical">Practical</option>
+              <option value="All">All</option>
+            </select>
+          </div>
+
+          <div id="mseTypeGroup" style="display:none;">
+            <label>MSE Type</label>
+            <select id="mseType"></select>
+          </div>
+
+          <div id="subjectListGroup" style="display:none;">
+            <label>Select Subject</label>
+            <select id="subjectList"></select>
+          </div>
+
+          <button type="submit">Proceed</button>
+        </form>
+      </div>
+      <div class="live-grid">
+        <h3>Result Logs</h3>
+        <div id="resultGrid">No entries yet.</div>
+      </div>
+    </section>
+
+    <!-- Fill/Update Marks Section -->
+    <section id="marks" class="section" style="display:none;">
+      <div class="form-area">
+        <h2>Fill/Update Marks</h2>
+        <form id="marksForm">
+          <input type="text" placeholder="First Name" required>
+          <input type="text" placeholder="Middle Name">
+          <input type="text" placeholder="Last Name" required>
+
+          <select required id="deptSelect">
+            <option value="">--Select Department--</option>
+            <option value="MCA">MCA</option>
+            <option value="MBA">MBA</option>
+            <option value="AIDS">AIDS</option>
+            <option value="AIML">AIML</option>
+            <option value="CIVIL">CIVIL</option>
+            <option value="Mechanical">Mechanical</option>
+            <option value="Electronic">Electronic</option>
+            <option value="CSE">CSE</option>
+            <option value="Pharmacy">Pharmacy</option>
+          </select>
+
+          <select required>
+            <option value="">--Select Session--</option>
+            <option value="2022-2023">2022-2023</option>
+            <option value="2023-2024">2023-2024</option>
+            <option value="2024-2025">2024-2025</option>
+          </select>
+
+          <select required id="classSelect"></select>
+          <select required id="semSelect"></select>
+
+          <div class="buttons">
+            <button type="reset">Clear</button>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+
+        <div id="subjectEntry" class="subject-entry" style="display:none;">
+          <h3>Subject & Marks Entry</h3>
+          <div class="subject-box">
+            <select id="subjectDropdown"></select>
+            <select id="evalType">
+              <option value="Theory">Theory</option>
+              <option value="Practical">Practical</option>
+              <option value="TA">Teacher Assessment</option>
+            </select>
+          </div>
+          <div id="marksFields"></div>
+          <button onclick="submitMarks()">Submit Marks</button>
+        </div>
+      </div>
+      <div class="live-grid">
+        <h3>Recent Marks Entries</h3>
+        <div id="marksGrid">No entries yet.</div>
+      </div>
+    </section>
+  </main>
+
+  <script src="faculty-script.js"></script>
+</body>
+</html>
