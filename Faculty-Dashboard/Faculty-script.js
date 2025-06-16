@@ -4,7 +4,13 @@ function showSection(id) {
   const active = document.getElementById(id);
   active.style.display = "flex";
   active.style.flexWrap = "nowrap";
+  localStorage.setItem("activeTab", id);
 }
+
+window.addEventListener("DOMContentLoaded", () => {
+  const lastTab = localStorage.getItem("activeTab") || "defaultSectionId";
+  showSection(lastTab);
+});
 
 // ------------------------ CLASS-SEMESTER LOGIC ------------------------
 const classSelect = document.getElementById("classSelect");
@@ -13,8 +19,18 @@ const deptSelectMarks = document.getElementById("deptSelect");
 
 deptSelectMarks?.addEventListener("change", () => {
   const dept = deptSelectMarks.value;
-  classSelect.innerHTML = '<option value="">--Select Class--</option>';
-  semSelect.innerHTML = '<option value="">--Select Semester--</option>';
+  classSelect.textContent = "";
+  semSelect.textContent = "";
+
+  const defaultClass = document.createElement("option");
+  defaultClass.value = "";
+  defaultClass.textContent = "--Select Class--";
+  classSelect.appendChild(defaultClass);
+
+  const defaultSem = document.createElement("option");
+  defaultSem.value = "";
+  defaultSem.textContent = "--Select Semester--";
+  semSelect.appendChild(defaultSem);
 
   const classes = (dept === "MCA" || dept === "MBA")
     ? ["1st Year", "2nd Year"]
@@ -31,7 +47,12 @@ deptSelectMarks?.addEventListener("change", () => {
 classSelect?.addEventListener("change", () => {
   const dept = deptSelectMarks.value;
   const year = classSelect.value;
-  semSelect.innerHTML = '<option value="">--Select Semester--</option>';
+  semSelect.textContent = "";
+
+  const defaultOpt = document.createElement("option");
+  defaultOpt.value = "";
+  defaultOpt.textContent = "--Select Semester--";
+  semSelect.appendChild(defaultOpt);
 
   const semesterMap = {
     "1st Year": [1, 2],
@@ -57,13 +78,15 @@ document.getElementById("marksForm")?.addEventListener("submit", (e) => {
   e.preventDefault();
   document.getElementById("subjectEntry").style.display = "block";
   const subjectDropdown = document.getElementById("subjectDropdown");
-  subjectDropdown.innerHTML = "";
+  subjectDropdown.textContent = "";
+
   ["Math", "OOP", "DBMS", "AI"].forEach(sub => {
     const opt = document.createElement("option");
     opt.value = sub;
     opt.textContent = sub;
     subjectDropdown.appendChild(opt);
   });
+
   document.getElementById("evalType").dispatchEvent(new Event("change"));
 });
 
@@ -72,7 +95,7 @@ const marksFields = document.getElementById("marksFields");
 
 evalType?.addEventListener("change", () => {
   const type = evalType.value;
-  marksFields.innerHTML = "";
+  marksFields.textContent = "";
 
   if (type === "Theory") {
     marksFields.innerHTML = `<input type='number' placeholder='Theory Marks (Max 60)' max='60' min='0'>`;
@@ -98,7 +121,10 @@ document.getElementById("registerForm")?.addEventListener("submit", (e) => {
   e.preventDefault();
   const grid = document.getElementById("studentGrid");
   const inputs = e.target.querySelectorAll("input, select");
-  const data = Array.from(inputs).map(i => i.value).filter(v => v).join(" | ");
+  const data = Array.from(inputs)
+    .map(i => i.value.trim())
+    .filter(v => v)
+    .join(" | ");
   const entry = document.createElement("div");
   entry.textContent = data;
   grid.prepend(entry);
@@ -120,13 +146,19 @@ const theorySubjects = ["Maths", "OOP", "DBMS", "AI"];
 const practicalSubjects = ["Lab-1", "DBMS Lab", "AI Lab"];
 
 function populateSubjects(subjects, includeAll = false) {
-  subjectList.innerHTML = '<option value="">--Select Subject--</option>';
+  subjectList.textContent = "";
+  const defaultOpt = document.createElement("option");
+  defaultOpt.value = "";
+  defaultOpt.textContent = "--Select Subject--";
+  subjectList.appendChild(defaultOpt);
+
   if (includeAll) {
     const allOption = document.createElement("option");
     allOption.value = "All";
     allOption.textContent = "All";
     subjectList.appendChild(allOption);
   }
+
   subjects.forEach(sub => {
     const opt = document.createElement("option");
     opt.value = sub;
@@ -136,13 +168,19 @@ function populateSubjects(subjects, includeAll = false) {
 }
 
 function populateMSE(includeAll = false) {
-  mseType.innerHTML = '<option value="">--Select MSE--</option>';
+  mseType.textContent = "";
+  const defaultOpt = document.createElement("option");
+  defaultOpt.value = "";
+  defaultOpt.textContent = "--Select MSE--";
+  mseType.appendChild(defaultOpt);
+
   if (includeAll) {
     const allOption = document.createElement("option");
     allOption.value = "All";
     allOption.textContent = "All";
     mseType.appendChild(allOption);
   }
+
   ["MSE-1", "MSE-2", "MSE-3"].forEach(mse => {
     const opt = document.createElement("option");
     opt.value = mse;
@@ -153,8 +191,18 @@ function populateMSE(includeAll = false) {
 
 department?.addEventListener("change", () => {
   const dept = department.value;
-  classDropdown.innerHTML = '<option value="">--Select Class--</option>';
-  semesterDropdown.innerHTML = '<option value="">--Select Semester--</option>';
+  classDropdown.textContent = "";
+  semesterDropdown.textContent = "";
+
+  const defaultClass = document.createElement("option");
+  defaultClass.value = "";
+  defaultClass.textContent = "--Select Class--";
+  classDropdown.appendChild(defaultClass);
+
+  const defaultSem = document.createElement("option");
+  defaultSem.value = "";
+  defaultSem.textContent = "--Select Semester--";
+  semesterDropdown.appendChild(defaultSem);
 
   const classes = (dept === "MCA" || dept === "MBA")
     ? ["1st Year", "2nd Year"]
@@ -171,18 +219,19 @@ department?.addEventListener("change", () => {
 classDropdown?.addEventListener("change", () => {
   const dept = department.value;
   const year = classDropdown.value;
-  let sems = [];
+  const sems = (dept === "MCA" || dept === "MBA")
+    ? (year === "1st Year" ? [1, 2] : [3, 4])
+    : (year === "1st Year" ? [1, 2]
+      : year === "2nd Year" ? [3, 4]
+      : year === "3rd Year" ? [5, 6]
+      : [7, 8]);
 
-  if (dept === "MCA" || dept === "MBA") {
-    sems = year === "1st Year" ? [1, 2] : [3, 4];
-  } else {
-    sems = year === "1st Year" ? [1, 2]
-         : year === "2nd Year" ? [3, 4]
-         : year === "3rd Year" ? [5, 6]
-         : [7, 8];
-  }
+  semesterDropdown.textContent = "";
+  const defaultOpt = document.createElement("option");
+  defaultOpt.value = "";
+  defaultOpt.textContent = "--Select Semester--";
+  semesterDropdown.appendChild(defaultOpt);
 
-  semesterDropdown.innerHTML = '<option value="">--Select Semester--</option>';
   sems.forEach(s => {
     const opt = document.createElement("option");
     opt.value = s;
@@ -234,11 +283,11 @@ document.getElementById("resultForm")?.addEventListener("submit", function (e) {
   e.preventDefault();
   const grid = document.getElementById("resultGrid");
 
-  const dept = department.value;
-  const session = document.getElementById("session").value;
-  const cls = classDropdown.value;
-  const sem = semesterDropdown.value;
-  const result = resultDropdown.value;
+  const dept = department.value.trim();
+  const session = document.getElementById("session").value.trim();
+  const cls = classDropdown.value.trim();
+  const sem = semesterDropdown.value.trim();
+  const result = resultDropdown.value.trim();
 
   const summary = `Dept: ${dept}, Session: ${session}, Class: ${cls}, Sem: ${sem}, Type: ${result}`;
   const entry = document.createElement("div");
@@ -249,9 +298,17 @@ document.getElementById("resultForm")?.addEventListener("submit", function (e) {
 // ------------------------ MARKS SUBMIT LOGIC ------------------------
 function submitMarks() {
   const grid = document.getElementById("marksGrid");
-  const subject = document.getElementById("subjectDropdown").value;
-  const type = document.getElementById("evalType").value;
-  const marks = Array.from(document.querySelectorAll("#marksFields input")).map(i => i.value).join(", ");
+  const subject = document.getElementById("subjectDropdown").value.trim();
+  const type = document.getElementById("evalType").value.trim();
+  const inputs = Array.from(document.querySelectorAll("#marksFields input"));
+  const valid = inputs.every(input => input.value.trim() !== "");
+
+  if (!subject || !type || !valid) {
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  const marks = inputs.map(i => i.value.trim()).join(", ");
   const entry = document.createElement("div");
   entry.textContent = `${subject} (${type}): ${marks}`;
   grid.prepend(entry);
